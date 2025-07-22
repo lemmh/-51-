@@ -21,7 +21,7 @@ void main ()
 				while(P3_1==0);
 				Delay(20);
 				LEDNUM++;
-				P2=~LEDNUM;
+				P2=~LEDNUM;//这里的LEDNUM表示只读，不改变LEDNUM及其++值;
 				}
 				
 	}
