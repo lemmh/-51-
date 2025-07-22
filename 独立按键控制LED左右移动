@@ -1,0 +1,56 @@
+#include <REGX52.H>
+void Delay(unsigned int xms)		
+{
+	unsigned char i, j;
+	while(xms--)
+	{
+	i = 2;
+	j = 239;
+	do
+	{
+		while (--j);
+	} while (--i);}
+}//延时函数
+
+void main()
+	{
+		
+		unsigned char LEDnum=0;
+		P2=0xFE;                //给led设置初始状态
+		while(1)
+		{
+			if(P3_1==0){
+				Delay(20);
+				while(P3_1==0);
+				Delay(20);        //消抖
+				LEDnum++;
+				if(LEDnum==8){
+					LEDnum=0;        //当LED在最左侧亮时往左移动
+				}
+				P2=~(0x01<<LEDnum);      //这一步很巧妙用0x01取反来操控唯一一个LED
+			}
+			if(P3_0==0){
+				Delay(20);
+				while(P3_0==0);
+				Delay(20);
+				LEDnum--;
+				if(LEDnum>7)
+					LEDnum=7;              //当LED在最右侧亮时往右移动，LEDnum=0时--，LED变为最大值
+				P2=~(0x01<<LEDnum);
+			}
+			if(P3_2==0){
+				Delay(20);
+				while(P3_2==0);
+				Delay(20);
+				P2=0xFE;
+				LEDnum=0;              //重新开始
+			}
+			if(P3_3==0)
+			{
+				Delay(20);
+				while(P3_1==0);
+				Delay(20);
+				P2=0xFF;              //结束
+			}
+		}
+	}
