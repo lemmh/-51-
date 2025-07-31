@@ -4,14 +4,25 @@ main.c文件
 #include "LCD1602.h"
 void main()
 {
-	LCD_Init(); //先进行初始化
+	LCD_Init();//先进行初始化
 	LCD_ShowChar(1,1,'D');
+//显示单个字符
+	LCD_ShowString(1,2,"bnxshz");
+//显示字符串 ，暂不具备显示汉字的功能，输入汉字显示乱码
+	LCD_ShowNum(1,9,123,3);
+//最后的3是Number的位数，若输出数字为123，最后数字为2则显示23后两位，最后数字为4显示为01223
+	LCD_ShowSignedNum(1,13,-66,2);
+//正负符号不算数字的长度
+	LCD_ShowHexNum(2,1,0xA8,2);
+	LCD_ShowBinNum(2,4,0xAA,8);
+//二进制数用16进制表示，如1010 1010 用0xAA表示
 	while (1)
 	{
 		
 	}
 		
 }
+
 
 LCD1602.c文件代码
 #include <REGX52.H>
@@ -237,6 +248,7 @@ void LCD_ShowBinNum(unsigned char Line,unsigned char Column,unsigned int Number,
 		LCD_WriteData(Number/LCD_Pow(2,i-1)%2+'0');
 	}
 }
+
 LCD1602.h文件代码
 #ifndef __LCD1602_H__
 #define __LCD1602_H__
@@ -248,7 +260,7 @@ void LCD_ShowString(unsigned char Line,unsigned char Column,char *String);
 void LCD_ShowNum(unsigned char Line,unsigned char Column,unsigned int Number,unsigned int Length);
 void LCD_ShowSignedNum(unsigned char Line,unsigned char Column,int Number,unsigned int Length);
 void LCD_ShowHexNum(unsigned char Line,unsigned char Column,unsigned int Number,unsigned int Length);
-void LCD_ShowBinNum(unsigned char Line,unsigned char Column,unsigned int Number);
+void LCD_ShowBinNum(unsigned char Line,unsigned char Column,unsigned int Number,unsigned int Length);
 
 
 #endif
