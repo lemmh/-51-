@@ -1,0 +1,75 @@
+main.c文件代码
+#include <REGX52.H>
+#include "LCD1602.h"
+#include "MatrixKey.h"
+#include "Delay.h"
+unsigned int KeyNum;        //这一点有疑问：？若将该定义写在LCD_ShowString后while前，则会出现KeyNum未定义，写在void外面和while里面都可以
+void main()
+{
+	LCD_Init();
+	LCD_ShowString(1,1,"MatrixKey:");
+	
+	while(1)
+	{	
+		KeyNum=MatrixKey();
+		if(KeyNum !=0)          //if判断不能少，在每一次循环KeyNum都会进行再次赋值
+		{
+			LCD_ShowNum(2,1,KeyNum,2);
+		}
+	}
+}
+
+
+*******************************************************************************************
+MatrixKey.c代码：
+
+说明：既可以逐行扫描，也可以逐列扫描，但这里引脚冲突，要用逐列扫描，5189系列以弱上拉，强下拉的方式读取，既可以输入，也可以输出
+#include <REGX52.H>
+#include"Delay.h"
+
+unsigned char MatrixKey()
+{
+	unsigned char KeyNumber=0;
+	P1=0xFF;
+	P1_3=0;
+	if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=1;}
+	if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=5;}
+	if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=9;}
+	if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=13;}
+	
+	P1=0xFF;
+	P1_2=0;
+	if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=2;}
+	if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=6;}
+	if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=10;}
+	if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=14;}
+	
+	P1=0xFF;
+	P1_1=0;
+	if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=3;}
+	if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=7;}
+	if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=11;}
+	if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=15;}
+	
+	P1=0xFF;
+	P1_0=0;
+	if(P1_7==0){Delay(20);while(P1_7==0);Delay(20);KeyNumber=4;}
+	if(P1_6==0){Delay(20);while(P1_6==0);Delay(20);KeyNumber=8;}
+	if(P1_5==0){Delay(20);while(P1_5==0);Delay(20);KeyNumber=12;}
+	if(P1_4==0){Delay(20);while(P1_4==0);Delay(20);KeyNumber=16;}
+	
+	return KeyNumber;
+	
+	
+}
+
+
+****************************************************************************************
+MatrixKey.h代码：
+#ifndef __MatrixKey_H__
+#define __MatrixKey_H__
+
+unsigned char MatrixKey();
+
+#endif
+
