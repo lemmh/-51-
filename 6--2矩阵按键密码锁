@@ -1,0 +1,56 @@
+main.c代码：
+#include <REGX52.H>
+#include "LCD1602.h"
+#include "MatrixKey.h"
+#include "Delay.h"
+unsigned int KeyNum;
+unsigned int Password=0;
+unsigned int count=0;
+void main()
+{
+	LCD_Init();
+	LCD_ShowString(1,1,"Password:");
+	
+	while(1)
+	{	
+		KeyNum=MatrixKey();
+		if(KeyNum)
+		{
+			if(KeyNum<=10)		//键1~10是数字1~9和0
+			{	
+				if(count<4)
+				{
+					Password*=10;	//将密码左进一位
+					KeyNum=KeyNum%10;//1~9就是1~9,10转化为0
+					Password+=KeyNum;				
+					count++;
+				}
+			}
+			LCD_ShowNum(2,1,Password,4);//更新显示
+			if(KeyNum==11)
+			{
+				if(Password==5608)
+				{
+					LCD_ShowString(1,14,"OK ");
+					Password=0;
+					count=0;
+					LCD_ShowNum(2,1,Password,4);
+				}
+				else
+				{
+					LCD_ShowString(1,14,"ERR");
+					Password=0;
+					count=0;
+					LCD_ShowNum(2,1,Password,4);
+				}
+			
+			}
+			if(KeyNum==12)
+			{
+				Password=0;
+				count=0;
+				LCD_ShowNum(2,1,Password,4);
+			}
+		}
+	}
+}
